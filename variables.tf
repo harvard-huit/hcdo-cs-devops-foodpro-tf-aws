@@ -177,7 +177,7 @@ variable "alb_sg_egress_rules" {
   default = {}
 }
 
-variable "foodpro_ingress_rules" {
+variable "foodpro_instance_ingress_rules" {
   description = "A map of ingress security group rules for the foodpro instances security group. Each key is a unique identifier for the rule, and the value is a map containing the rule's details."
   type = map(object({
     from_port                    = optional(number)
@@ -191,7 +191,7 @@ variable "foodpro_ingress_rules" {
 
 }
 
-variable "foodpro_egress_rules" {
+variable "foodpro_instance_egress_rules" {
   description = "A map of egress security group rules for the foodpro instances security group. Each key is a unique identifier for the rule, and the value is a map containing the rule's details."
   type = map(object({
     from_port                    = optional(number)
@@ -210,8 +210,8 @@ variable "zone_id" {
   type        = string
 }
 
-variable "gsas_web_alb_domain_name" {
-  description = "The domain name for the GSAS Web ALB."
+variable "foodpro_public_alb_domain_name" {
+  description = "The domain name for the FoodPro Public ALB."
   type        = string
 }
 

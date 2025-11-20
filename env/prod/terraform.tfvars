@@ -48,57 +48,7 @@ alb_sg_egress_rules = {
   }
 }
 
-gsas_web_ingress_rules = {
-  "all_gsas_vpn" = {
-    from_port   = null
-    to_port     = null
-    ip_protocol = -1
-    cidr_ipv4   = "10.1.202.0/24"
-    description = "Allow All from GSAS VPN"
-  },
-  "all_adsysadmin_vpn" = {
-    from_port   = null
-    to_port     = null
-    ip_protocol = -1
-    cidr_ipv4   = "10.11.208.0/24"
-    description = "Allow All from AD Sysadmin VPN"
-  },
-  "socdbadmin_vpn" = {
-    from_port   = null
-    to_port     = null
-    ip_protocol = -1
-    cidr_ipv4   = "10.11.134.0/24"
-    description = "Allow All from SOC DB Admin VPN"
-  },
-
-
-}
-
-gsas_web_egress_rules = {
-  "all_gsas_vpn" = {
-    from_port   = null
-    to_port     = null
-    ip_protocol = -1
-    cidr_ipv4   = "10.1.202.0/24"
-    description = "Allow All from GSAS VPN"
-  },
-  "all_adsysadmin_vpn" = {
-    from_port   = null
-    to_port     = null
-    ip_protocol = -1
-    cidr_ipv4   = "10.11.208.0/24"
-    description = "Allow All from AD Sysadmin VPN"
-  },
-  "socdbadmin_vpn" = {
-    from_port   = null
-    to_port     = null
-    ip_protocol = -1
-    cidr_ipv4   = "10.11.134.0/24"
-    description = "Allow All from SOC DB Admin VPN"
-  },
-}
-
-gsas_sql_ingress_rules = {
+foodpro_instance_ingress_rules = {
   "all_gsas_vpn" = {
     from_port   = null
     to_port     = null
@@ -227,7 +177,7 @@ gsas_sql_ingress_rules = {
   },
 }
 
-gsas_sql_egress_rules = {
+foodpro_instance_egress_rules = {
   "all_gsas_vpn" = {
     from_port   = null
     to_port     = null
@@ -251,7 +201,7 @@ gsas_sql_egress_rules = {
   },
 }
 
-gsas_web_instances = {
+foodpro_instance = {
   0 = {
     name          = "gsas-financialaidweb-prod"
     ami_id        = "ami-0bd829e4f30dc38b0"
@@ -261,8 +211,8 @@ gsas_web_instances = {
     platform      = "windows"
     backup_policy = "11PM_DAILY"
     patch_policy  = "Week1"
-    jail_sg       = false
-    create        = true
+    jail_sg       = true
+    create        = false
     domain_name   = "gsas-pf-web.fas.cloud.huit.harvard.edu"
     root_block_device = [
       {
@@ -272,3 +222,6 @@ gsas_web_instances = {
     ]
   }
 }
+
+zone_id                        = "Z3JNWCJMDIMUN4"
+foodpro_public_alb_domain_name = "foodpro-public-alb.fas.cloud.huit.harvard.edu"
