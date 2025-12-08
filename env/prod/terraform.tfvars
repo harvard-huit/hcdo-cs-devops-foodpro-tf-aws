@@ -759,10 +759,10 @@ foodpro_instance_egress_rules = {
   },
 }
 
-foodpro_instance = {
+foodpro_instances = {
   0 = {
     name          = "dsfooddb-preprod"
-    ami_id        = "ami-0bd829e4f30dc38b0"
+    ami_id        = "ami-0a69756aba806579b"
     instance_type = "m5.xlarge"
     key_name      = "foodpro-prod-standard"
     static        = true
@@ -770,14 +770,21 @@ foodpro_instance = {
     backup_policy = "11PM_DAILY"
     patch_policy  = "Week1"
     jail_sg       = true
-    create        = false
+    create        = true
     domain_name   = "dsfooddb-instance-preprod.prod.campusservices.cloud.huit.harvard.edu"
     root_block_device = [
       {
-        volume_type = "gp2"
+        volume_type = "gp3"
         volume_size = 100
       },
     ]
+    modify_existing_ebs_block_devices = {
+      01 = {
+        device_name = "/dev/sdb"
+        volume_type = "gp3"
+        volume_size = 200
+      }
+    }
   }
 }
 

@@ -235,14 +235,14 @@ module "foodpro_public_alb" {
       certificate_arn = var.acm_certificate_arn
 
       forward = {
-        target_group_key = "foodpro_web"
+        target_group_key = "foodpro_web_public_tg"
       }
     }
   }
 
   target_groups = {
-    foodpro_web = {
-      name                              = "${module.constants.resource_prefix}-alb-https-tg"
+    foodpro_web_public_tg = {
+      name                              = "${module.constants.resource_prefix}-alb-https-public-tg"
       protocol                          = "HTTPS"
       port                              = 443
       target_type                       = "instance"
@@ -301,7 +301,7 @@ module "foodpro_instance_record" {
   for_each = { for k, v in var.foodpro_instances : k => v if v.create }
 
   zone_id     = var.zone_id
-  domain_name = each.value.dns_record
+  domain_name = each.value.domain_name
   type        = "A"
   ttl         = 300
   records     = [module.foodpro_instance[each.key].private_ip]
@@ -311,7 +311,8 @@ module "foodpro_instance" {
   source  = "artifactory.huit.harvard.edu/cloudarch-terraform-virtual__aws-modules/aws_ec2/aws"
   version = "~> v2.0"
 
-  for_each      = { for k, v in var.foodpro_instances : k => v if v.create }
+  for_each = { for k, v in var.foodpro_instances : k => v if v.create }
+
   name          = each.value.name
   static        = each.value.static
   platform      = each.value.platform
@@ -329,7 +330,7 @@ module "foodpro_instance" {
   modify_existing_ebs_block_devices = each.value.modify_existing_ebs_block_devices != null ? { for k, v in each.value.modify_existing_ebs_block_devices : k => merge(v, local.encryption_properties) } : null
 
   ami                     = each.value.ami_id
-  security_group_ids      = [module.foodpro_instance_ec2_sg[each.key].sg.id]
+  security_group_ids      = [module.foodpro_instance_ec2_sg.sg.id]
   disable_api_stop        = true
   disable_api_termination = true
   key_name                = each.value.key_name
