@@ -210,8 +210,8 @@ variable "zone_id" {
   type        = string
 }
 
-variable "foodpro_public_alb_domain_name" {
-  description = "The domain name for the FoodPro Public ALB."
+variable "foodpro_private_alb_domain_name" {
+  description = "The domain name for the FoodPro Private ALB."
   type        = string
 }
 

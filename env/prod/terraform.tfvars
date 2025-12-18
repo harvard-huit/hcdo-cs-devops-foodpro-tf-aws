@@ -20,7 +20,7 @@ iam_instance_profile_name = "campussvcs-prod-foodpro-instance-role"
 jail_sg                   = true
 lift_and_shift            = true
 
-create_alb = false
+create_alb = true
 
 # alb_sg_ingress_rules = {
 #   "elb_http1" = {
@@ -53,84 +53,42 @@ alb_sg_ingress_rules = {
     from_port   = 80
     to_port     = 80
     ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.24.188/32"
+    cidr_ipv4   = "10.1.188.0/24"
     description = "Allow HTTP from CSTL VPN NAT"
   },
   "cstl_vpn_https1" = {
     from_port   = 443
     to_port     = 443
     ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.24.188/32"
-    description = "Allow HTTPS from CSTL VPN NAT"
-  },
-  "cstl_vpn_http2" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.224.188/32"
-    description = "Allow HTTP from CSTL VPN NAT"
-  },
-  "cstl_vpn_https2" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.224.188/32"
+    cidr_ipv4   = "10.1.188.0/24"
     description = "Allow HTTPS from CSTL VPN NAT"
   },
   "cloudadmin_vpn_http1" = {
     from_port   = 80
     to_port     = 80
     ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.15.22/32"
+    cidr_ipv4   = "10.11.22.0/24"
     description = "Allow HTTP from CloudAdmin VPN NAT"
   },
   "cloudadmin_vpn_https1" = {
     from_port   = 443
     to_port     = 443
     ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.15.22/32"
-    description = "Allow HTTPS from CloudAdmin VPN NAT"
-  },
-  "cloudadmin_vpn_http2" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.150.22/32"
-    description = "Allow HTTP from CloudAdmin VPN NAT"
-  },
-  "cloudadmin_vpn_https2" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.150.22/32"
+    cidr_ipv4   = "10.11.22.0/24"
     description = "Allow HTTPS from CloudAdmin VPN NAT"
   },
   "socdbadmin_vpn_http1" = {
     from_port   = 80
     to_port     = 80
     ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.15.134/32"
+    cidr_ipv4   = "10.11.134.0/24"
     description = "Allow HTTP from SOC DB Admin VPN NAT"
   },
   "socdbadmin_vpn_https1" = {
     from_port   = 443
     to_port     = 443
     ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.15.134/32"
-    description = "Allow HTTPS from SOC DB Admin VPN NAT"
-  },
-  "socdbadmin_vpn_http2" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.150.134/32"
-    description = "Allow HTTP from SOC DB Admin VPN NAT"
-  },
-  "socdbadmin_vpn_https2" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.150.134/32"
+    cidr_ipv4   = "10.11.134.0/24"
     description = "Allow HTTPS from SOC DB Admin VPN NAT"
   },
 }
@@ -139,84 +97,42 @@ alb_sg_egress_rules = {
     from_port   = 80
     to_port     = 80
     ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.24.188/32"
+    cidr_ipv4   = "10.1.188.0/24"
     description = "Allow HTTP from CSTL VPN NAT"
   },
   "cstl_vpn_https1" = {
     from_port   = 443
     to_port     = 443
     ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.24.188/32"
-    description = "Allow HTTPS from CSTL VPN NAT"
-  },
-  "cstl_vpn_http2" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.224.188/32"
-    description = "Allow HTTP from CSTL VPN NAT"
-  },
-  "cstl_vpn_https2" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.224.188/32"
+    cidr_ipv4   = "10.1.188.0/24"
     description = "Allow HTTPS from CSTL VPN NAT"
   },
   "cloudadmin_vpn_http1" = {
     from_port   = 80
     to_port     = 80
     ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.15.22/32"
+    cidr_ipv4   = "10.11.22.0/24"
     description = "Allow HTTP from CloudAdmin VPN NAT"
   },
   "cloudadmin_vpn_https1" = {
     from_port   = 443
     to_port     = 443
     ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.15.22/32"
-    description = "Allow HTTPS from CloudAdmin VPN NAT"
-  },
-  "cloudadmin_vpn_http2" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.150.22/32"
-    description = "Allow HTTP from CloudAdmin VPN NAT"
-  },
-  "cloudadmin_vpn_https2" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.150.22/32"
+    cidr_ipv4   = "10.11.22.0/24"
     description = "Allow HTTPS from CloudAdmin VPN NAT"
   },
   "socdbadmin_vpn_http1" = {
     from_port   = 80
     to_port     = 80
     ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.15.134/32"
+    cidr_ipv4   = "10.11.134.0/24"
     description = "Allow HTTP from SOC DB Admin VPN NAT"
   },
   "socdbadmin_vpn_https1" = {
     from_port   = 443
     to_port     = 443
     ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.15.134/32"
-    description = "Allow HTTPS from SOC DB Admin VPN NAT"
-  },
-  "socdbadmin_vpn_http2" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.150.134/32"
-    description = "Allow HTTP from SOC DB Admin VPN NAT"
-  },
-  "socdbadmin_vpn_https2" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.150.134/32"
+    cidr_ipv4   = "10.11.134.0/24"
     description = "Allow HTTPS from SOC DB Admin VPN NAT"
   },
 }
@@ -788,5 +704,5 @@ foodpro_instances = {
   }
 }
 
-zone_id                        = "Z3TAOW6NH6G64H"
-foodpro_public_alb_domain_name = "dsfooddb-preprod.prod.campusservices.cloud.huit.harvard.edu"
+zone_id                         = "Z3TAOW6NH6G64H"
+foodpro_private_alb_domain_name = "dsfooddb-preprod.prod.campusservices.cloud.huit.harvard.edu"

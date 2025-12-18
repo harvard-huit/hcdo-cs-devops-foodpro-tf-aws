@@ -63,14 +63,14 @@ locals {
       from_port                    = 80
       to_port                      = 80
       ip_protocol                  = "tcp"
-      referenced_security_group_id = module.foodpro_public_alb_sg.sg.id
+      referenced_security_group_id = module.foodpro_private_alb_sg.sg.id
       description                  = "Allow HTTP from ALB"
     },
     "elb_https" = {
       from_port                    = 443
       to_port                      = 443
       ip_protocol                  = "tcp"
-      referenced_security_group_id = module.foodpro_public_alb_sg.sg.id
+      referenced_security_group_id = module.foodpro_private_alb_sg.sg.id
       description                  = "Allow HTTPS from ALB"
     },
   }
@@ -80,14 +80,14 @@ locals {
       from_port                    = 80
       to_port                      = 80
       ip_protocol                  = "tcp"
-      referenced_security_group_id = module.foodpro_public_alb_sg.sg.id
+      referenced_security_group_id = module.foodpro_private_alb_sg.sg.id
       description                  = "Allow HTTP to ALB"
     },
     "elb_https" = {
       from_port                    = 443
       to_port                      = 443
       ip_protocol                  = "tcp"
-      referenced_security_group_id = module.foodpro_public_alb_sg.sg.id
+      referenced_security_group_id = module.foodpro_private_alb_sg.sg.id
       description                  = "Allow HTTPS to ALB"
     },
   }
@@ -130,7 +130,7 @@ module "metadata" {
 # Resources
 # ------------------------------------------------------------------------------
 
-module "foodpro_public_alb_sg" {
+module "foodpro_private_alb_sg" {
   source  = "artifactory.huit.harvard.edu/cloudarch-terraform-virtual__aws-modules/aws_sg/aws"
   version = "~> v2.0"
 
@@ -139,7 +139,7 @@ module "foodpro_public_alb_sg" {
   tier   = "app"
   vpc_id = module.metadata.vpc_config.vpc_id
 
-  name_prefix = "${module.constants.resource_prefix}-web-alb"
+  name_prefix = "${module.constants.resource_prefix}-web-alb-priv"
 
   ingress_rules = var.alb_sg_ingress_rules
 
@@ -163,7 +163,7 @@ module "foodpro_instance_ec2_sg" {
   egress_rules = merge(var.foodpro_instance_egress_rules, local.alb_egress_from_web_rules)
 
   jailed     = var.jail_sg
-  depends_on = [module.foodpro_public_alb_sg]
+  depends_on = [module.foodpro_private_alb_sg]
 }
 
 # -----------------------------------------------------------------------------
@@ -174,33 +174,33 @@ locals {
   log_bucket_name = "campussvcs-${var.product_environment_short}-standard-elb-logs"
 }
 
-module "foodpro_public_alb_record" {
+module "foodpro_private_alb_record" {
   source  = "artifactory.huit.harvard.edu/cloudarch-terraform-virtual__aws-modules/aws_route53/aws"
   version = "~> v0.1"
 
   count = var.create_alb ? 1 : 0
 
   zone_id     = var.zone_id
-  domain_name = var.foodpro_public_alb_domain_name
+  domain_name = var.foodpro_private_alb_domain_name
   type        = "A"
   alias = {
-    name                   = module.foodpro_public_alb[0].dns_name
+    name                   = module.foodpro_private_alb[0].dns_name
     evaluate_target_health = false
   }
 }
 
-module "foodpro_public_alb" {
+module "foodpro_private_alb" {
   source  = "artifactory.huit.harvard.edu/cloudarch-terraform-virtual__aws-modules/aws_loadbalancer/aws"
   version = "~> v0.0" # This is just to ensure the latest version will be pulled when the app is first set up.
 
   count = var.create_alb ? 1 : 0
 
-  internal       = false
+  internal       = true
   constants_data = module.constants
   metadata_data  = module.metadata
 
-  security_group_ids = [module.foodpro_public_alb_sg.sg.id]
-  subnet_ids         = module.metadata.vpc_config.subnets[var.product_context]["elbpub"]
+  security_group_ids = [module.foodpro_private_alb_sg.sg.id]
+  subnet_ids         = module.metadata.vpc_config.subnets[var.product_context]["elbpriv"]
 
   enable_deletion_protection = true
 
@@ -235,14 +235,14 @@ module "foodpro_public_alb" {
       certificate_arn = var.acm_certificate_arn
 
       forward = {
-        target_group_key = "foodpro_web_public_tg"
+        target_group_key = "foodpro_web_priv_tg"
       }
     }
   }
 
   target_groups = {
-    foodpro_web_public_tg = {
-      name                              = "${module.constants.resource_prefix}-alb-https-public-tg"
+    foodpro_web_priv_tg = {
+      name                              = "${module.constants.resource_prefix}-alb-https-priv-tg"
       protocol                          = "HTTPS"
       port                              = 443
       target_type                       = "instance"
