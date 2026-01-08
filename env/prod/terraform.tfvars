@@ -8,9 +8,9 @@ product_name_short        = "foodpro"
 product_environment       = "production"
 product_environment_short = "prod"
 product_asset_id          = 9329
-product_context           = "level4"
+product_context           = "standard"
 product_criticality       = "Important"
-product_data_class        = "level4"
+product_data_class        = "nonlevel4"
 product_hosted_by         = "DevOps-APT4"
 
 shared_values_prefix = "SharedValues-campussvcs-prod"
@@ -138,13 +138,6 @@ alb_sg_egress_rules = {
 }
 
 foodpro_instance_ingress_rules = {
-  "all_traffic1" = {
-    from_port   = null
-    to_port     = null
-    ip_protocol = -1
-    cidr_ipv4   = "10.1.188.0/24"
-    description = "Allow All 1"
-  },
   "all_traffic2" = {
     from_port   = null
     to_port     = null
@@ -403,17 +396,31 @@ foodpro_instance_ingress_rules = {
     ip_protocol = "tcp"
     cidr_ipv4   = "10.142.34.64/26"
     description = "Allow RDP 3389 1"
+  },
+  "all_cstl_vpn" = {
+    from_port   = null
+    to_port     = null
+    ip_protocol = -1
+    cidr_ipv4   = "10.1.188.0/24"
+    description = "Allow All Traffic from CSTL VPN"
+  },
+  "all_cloudadmin_vpn" = {
+    from_port   = null
+    to_port     = null
+    ip_protocol = -1
+    cidr_ipv4   = "10.11.22.0/24"
+    description = "Allow All Traffic from CloudAdmin VPN"
+  },
+  "all_socdbadmin_vpn" = {
+    from_port   = null
+    to_port     = null
+    ip_protocol = -1
+    cidr_ipv4   = "10.11.134.0/24"
+    description = "Allow All Traffic from SOC DB Admin VPN"
   },
 }
 
 foodpro_instance_egress_rules = {
-  "all_traffic1" = {
-    from_port   = null
-    to_port     = null
-    ip_protocol = -1
-    cidr_ipv4   = "10.1.188.0/24"
-    description = "Allow All 1"
-  },
   "all_traffic2" = {
     from_port   = null
     to_port     = null
@@ -672,13 +679,34 @@ foodpro_instance_egress_rules = {
     ip_protocol = "tcp"
     cidr_ipv4   = "10.142.34.64/26"
     description = "Allow RDP 3389 1"
+  },
+  "all_cstl_vpn" = {
+    from_port   = null
+    to_port     = null
+    ip_protocol = -1
+    cidr_ipv4   = "10.1.188.0/24"
+    description = "Allow All Traffic to CSTL VPN"
+  },
+  "all_cloudadmin_vpn" = {
+    from_port   = null
+    to_port     = null
+    ip_protocol = -1
+    cidr_ipv4   = "10.11.22.0/24"
+    description = "Allow All Traffic to CloudAdmin VPN"
+  },
+  "all_socdbadmin_vpn" = {
+    from_port   = null
+    to_port     = null
+    ip_protocol = -1
+    cidr_ipv4   = "10.11.134.0/24"
+    description = "Allow All Traffic to SOC DB Admin VPN"
   },
 }
 
 foodpro_instances = {
   0 = {
     name          = "dsfooddb-preprod"
-    ami_id        = "ami-0a69756aba806579b"
+    ami_id        = "ami-073a9084af52cfb6c"
     instance_type = "m5.xlarge"
     key_name      = "foodpro-prod-standard"
     static        = true
