@@ -474,90 +474,90 @@ foodpro_instance_ingress_rules = {
     cidr_ipv4   = "10.39.133.0/24"
     description = "Allow UDP 554 1"
   },
-  "http_1" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.132.0/24"
-    description = "Allow HTTP 80 1"
-  },
-  "http_2" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.133.0/24"
-    description = "Allow HTTP 80 2"
-  },
-  "http_3" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.134.0/24"
-    description = "Allow HTTP 80 3"
-  },
-  "http_4" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.161.0/25"
-    description = "Allow HTTP 80 4"
-  },
-  "http_5" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.244.0/24"
-    description = "Allow HTTP 80 5"
-  },
-  "http_6" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.32.0/27"
-    description = "Allow HTTP 80 6"
-  },
-  "https_1" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.132.0/24"
-    description = "Allow HTTPS 443 1"
-  },
-  "https_2" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.133.0/24"
-    description = "Allow HTTPS 443 2"
-  },
-  "https_3" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.134.0/24"
-    description = "Allow HTTPS 443 3"
-  },
-  "https_4" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.161.0/25"
-    description = "Allow HTTPS 443 4"
-  },
-  "https_5" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.244.0/24"
-    description = "Allow HTTPS 443 5"
-  },
-  "https_6" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.32.0/27"
-    description = "Allow HTTPS 443 6"
-  },
+  # "http_1" = {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.132.0/24"
+  #   description = "Allow HTTP 80 1"
+  # },
+  # "http_2" = {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.133.0/24"
+  #   description = "Allow HTTP 80 2"
+  # },
+  # "http_3" = {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.134.0/24"
+  #   description = "Allow HTTP 80 3"
+  # },
+  # "http_4" = {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.161.0/25"
+  #   description = "Allow HTTP 80 4"
+  # },
+  # "http_5" = {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.244.0/24"
+  #   description = "Allow HTTP 80 5"
+  # },
+  # "http_6" = {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.32.0/27"
+  #   description = "Allow HTTP 80 6"
+  # },
+  # "https_1" = {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.132.0/24"
+  #   description = "Allow HTTPS 443 1"
+  # },
+  # "https_2" = {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.133.0/24"
+  #   description = "Allow HTTPS 443 2"
+  # },
+  # "https_3" = {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.134.0/24"
+  #   description = "Allow HTTPS 443 3"
+  # },
+  # "https_4" = {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.161.0/25"
+  #   description = "Allow HTTPS 443 4"
+  # },
+  # "https_5" = {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.244.0/24"
+  #   description = "Allow HTTPS 443 5"
+  # },
+  # "https_6" = {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.32.0/27"
+  #   description = "Allow HTTPS 443 6"
+  # },
   "rdp_1" = {
     from_port   = 3389
     to_port     = 3389
@@ -757,90 +757,90 @@ foodpro_instance_egress_rules = {
     cidr_ipv4   = "10.39.133.0/24"
     description = "Allow UDP 554 1"
   },
-  "http_1" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.132.0/24"
-    description = "Allow HTTP 80 1"
-  },
-  "http_2" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.133.0/24"
-    description = "Allow HTTP 80 2"
-  },
-  "http_3" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.134.0/24"
-    description = "Allow HTTP 80 3"
-  },
-  "http_4" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.161.0/25"
-    description = "Allow HTTP 80 4"
-  },
-  "http_5" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.244.0/24"
-    description = "Allow HTTP 80 5"
-  },
-  "http_6" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.32.0/27"
-    description = "Allow HTTP 80 6"
-  },
-  "https_1" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.132.0/24"
-    description = "Allow HTTPS 443 1"
-  },
-  "https_2" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.133.0/24"
-    description = "Allow HTTPS 443 2"
-  },
-  "https_3" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.134.0/24"
-    description = "Allow HTTPS 443 3"
-  },
-  "https_4" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.161.0/25"
-    description = "Allow HTTPS 443 4"
-  },
-  "https_5" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.244.0/24"
-    description = "Allow HTTPS 443 5"
-  },
-  "https_6" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.32.0/27"
-    description = "Allow HTTPS 443 6"
-  },
+  # "http_1" = {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.132.0/24"
+  #   description = "Allow HTTP 80 1"
+  # },
+  # "http_2" = {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.133.0/24"
+  #   description = "Allow HTTP 80 2"
+  # },
+  # "http_3" = {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.134.0/24"
+  #   description = "Allow HTTP 80 3"
+  # },
+  # "http_4" = {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.161.0/25"
+  #   description = "Allow HTTP 80 4"
+  # },
+  # "http_5" = {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.244.0/24"
+  #   description = "Allow HTTP 80 5"
+  # },
+  # "http_6" = {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.32.0/27"
+  #   description = "Allow HTTP 80 6"
+  # },
+  # "https_1" = {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.132.0/24"
+  #   description = "Allow HTTPS 443 1"
+  # },
+  # "https_2" = {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.133.0/24"
+  #   description = "Allow HTTPS 443 2"
+  # },
+  # "https_3" = {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.134.0/24"
+  #   description = "Allow HTTPS 443 3"
+  # },
+  # "https_4" = {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.161.0/25"
+  #   description = "Allow HTTPS 443 4"
+  # },
+  # "https_5" = {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.244.0/24"
+  #   description = "Allow HTTPS 443 5"
+  # },
+  # "https_6" = {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.32.0/27"
+  #   description = "Allow HTTPS 443 6"
+  # },
   "rdp_1" = {
     from_port   = 3389
     to_port     = 3389
