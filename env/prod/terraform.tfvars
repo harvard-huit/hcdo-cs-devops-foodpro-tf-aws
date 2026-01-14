@@ -15,7 +15,7 @@ product_hosted_by         = "DevOps-APT4"
 
 shared_values_prefix = "SharedValues-campussvcs-prod"
 
-acm_certificate_arn       = "arn:aws:acm:us-east-1:269988613319:certificate/b2b457c2-7572-4d56-b717-ed380e39970e"
+acm_certificate_arn       = "arn:aws:acm:us-east-1:269988613319:certificate/5720a43b-55cb-4966-a99b-ae746ad0762d"
 iam_instance_profile_name = "campussvcs-prod-foodpro-instance-role"
 jail_sg                   = true
 lift_and_shift            = true
@@ -91,6 +91,90 @@ alb_sg_ingress_rules = {
     cidr_ipv4   = "10.11.134.0/24"
     description = "Allow HTTPS from SOC DB Admin VPN NAT"
   },
+  "http_1" = {
+    from_port   = 80
+    to_port     = 80
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.132.0/24"
+    description = "Allow HTTP 80 1"
+  },
+  "http_2" = {
+    from_port   = 80
+    to_port     = 80
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.133.0/24"
+    description = "Allow HTTP 80 2"
+  },
+  "http_3" = {
+    from_port   = 80
+    to_port     = 80
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.134.0/24"
+    description = "Allow HTTP 80 3"
+  },
+  "http_4" = {
+    from_port   = 80
+    to_port     = 80
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.161.0/25"
+    description = "Allow HTTP 80 4"
+  },
+  "http_5" = {
+    from_port   = 80
+    to_port     = 80
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.244.0/24"
+    description = "Allow HTTP 80 5"
+  },
+  "http_6" = {
+    from_port   = 80
+    to_port     = 80
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.32.0/27"
+    description = "Allow HTTP 80 6"
+  },
+  "https_1" = {
+    from_port   = 443
+    to_port     = 443
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.132.0/24"
+    description = "Allow HTTPS 443 1"
+  },
+  "https_2" = {
+    from_port   = 443
+    to_port     = 443
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.133.0/24"
+    description = "Allow HTTPS 443 2"
+  },
+  "https_3" = {
+    from_port   = 443
+    to_port     = 443
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.134.0/24"
+    description = "Allow HTTPS 443 3"
+  },
+  "https_4" = {
+    from_port   = 443
+    to_port     = 443
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.161.0/25"
+    description = "Allow HTTPS 443 4"
+  },
+  "https_5" = {
+    from_port   = 443
+    to_port     = 443
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.244.0/24"
+    description = "Allow HTTPS 443 5"
+  },
+  "https_6" = {
+    from_port   = 443
+    to_port     = 443
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.32.0/27"
+    description = "Allow HTTPS 443 6"
+  },
 }
 alb_sg_egress_rules = {
   "cstl_vpn_http1" = {
@@ -134,6 +218,90 @@ alb_sg_egress_rules = {
     ip_protocol = "tcp"
     cidr_ipv4   = "10.11.134.0/24"
     description = "Allow HTTPS from SOC DB Admin VPN NAT"
+  },
+  "http_1" = {
+    from_port   = 80
+    to_port     = 80
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.132.0/24"
+    description = "Allow HTTP 80 1"
+  },
+  "http_2" = {
+    from_port   = 80
+    to_port     = 80
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.133.0/24"
+    description = "Allow HTTP 80 2"
+  },
+  "http_3" = {
+    from_port   = 80
+    to_port     = 80
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.134.0/24"
+    description = "Allow HTTP 80 3"
+  },
+  "http_4" = {
+    from_port   = 80
+    to_port     = 80
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.161.0/25"
+    description = "Allow HTTP 80 4"
+  },
+  "http_5" = {
+    from_port   = 80
+    to_port     = 80
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.244.0/24"
+    description = "Allow HTTP 80 5"
+  },
+  "http_6" = {
+    from_port   = 80
+    to_port     = 80
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.32.0/27"
+    description = "Allow HTTP 80 6"
+  },
+  "https_1" = {
+    from_port   = 443
+    to_port     = 443
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.132.0/24"
+    description = "Allow HTTPS 443 1"
+  },
+  "https_2" = {
+    from_port   = 443
+    to_port     = 443
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.133.0/24"
+    description = "Allow HTTPS 443 2"
+  },
+  "https_3" = {
+    from_port   = 443
+    to_port     = 443
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.134.0/24"
+    description = "Allow HTTPS 443 3"
+  },
+  "https_4" = {
+    from_port   = 443
+    to_port     = 443
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.161.0/25"
+    description = "Allow HTTPS 443 4"
+  },
+  "https_5" = {
+    from_port   = 443
+    to_port     = 443
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.244.0/24"
+    description = "Allow HTTPS 443 5"
+  },
+  "https_6" = {
+    from_port   = 443
+    to_port     = 443
+    ip_protocol = "tcp"
+    cidr_ipv4   = "128.103.32.0/27"
+    description = "Allow HTTPS 443 6"
   },
 }
 
@@ -705,7 +873,7 @@ foodpro_instance_egress_rules = {
 
 foodpro_instances = {
   0 = {
-    name          = "dsfooddb-preprod"
+    name          = "dsfooddb"
     ami_id        = "ami-073a9084af52cfb6c"
     instance_type = "m5.xlarge"
     key_name      = "foodpro-prod-standard"
@@ -715,7 +883,7 @@ foodpro_instances = {
     patch_policy  = "Week1"
     jail_sg       = true
     create        = true
-    domain_name   = "dsfooddb-instance-preprod.prod.campusservices.cloud.huit.harvard.edu"
+    domain_name   = "dsfooddb-instance.prod.campusservices.cloud.huit.harvard.edu"
     root_block_device = [
       {
         volume_type = "gp3"
@@ -733,4 +901,4 @@ foodpro_instances = {
 }
 
 zone_id                         = "Z3TAOW6NH6G64H"
-foodpro_private_alb_domain_name = "dsfooddb-preprod.prod.campusservices.cloud.huit.harvard.edu"
+foodpro_private_alb_domain_name = "dsfooddb.prod.campusservices.cloud.huit.harvard.edu"
