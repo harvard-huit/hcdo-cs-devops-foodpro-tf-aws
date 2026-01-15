@@ -337,6 +337,10 @@ module "foodpro_instance" {
 
   iam_instance_profile_name = var.iam_instance_profile_name
 
+  primary_network_interface = [{
+    network_interface_id = aws_network_interface.foodpro_db_static[each.key].id
+  }]
+
   tags = merge(
     local.default_tags,
     {
