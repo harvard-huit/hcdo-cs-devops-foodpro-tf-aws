@@ -17,7 +17,7 @@ shared_values_prefix = "SharedValues-campussvcs-prod"
 
 acm_certificate_arn       = "arn:aws:acm:us-east-1:269988613319:certificate/5720a43b-55cb-4966-a99b-ae746ad0762d"
 iam_instance_profile_name = "campussvcs-prod-foodpro-instance-role"
-jail_sg                   = true
+jail_sg                   = false
 lift_and_shift            = true
 
 create_alb = true
@@ -376,6 +376,27 @@ foodpro_instance_ingress_rules = {
     cidr_ipv4   = "128.103.32.0/27"
     description = "Allow TCP 8992 9"
   },
+  "appstream_8992_1" = {
+    from_port   = 8992
+    to_port     = 8992
+    ip_protocol = "tcp"
+    cidr_ipv4   = "10.39.134.0/24"
+    description = "Allow Appstream subnet 8992 1"
+  },
+  "appstream_8992_2" = {
+    from_port   = 8992
+    to_port     = 8992
+    ip_protocol = "tcp"
+    cidr_ipv4   = "10.39.135.0/24"
+    description = "Allow Appstream subnet 8992 2"
+  },
+  "appstream_8992_3" = {
+    from_port   = 8992
+    to_port     = 8992
+    ip_protocol = "tcp"
+    cidr_ipv4   = "10.39.133.0/24"
+    description = "Allow Appstream subnet 8992 3"
+  },
   "tcp_31438_1" = {
     from_port   = 31438
     to_port     = 31438
@@ -438,6 +459,27 @@ foodpro_instance_ingress_rules = {
     ip_protocol = "tcp"
     cidr_ipv4   = "128.103.32.0/27"
     description = "Allow TCP 31438 9"
+  },
+  "appstream_31438_1" = {
+    from_port   = 31438
+    to_port     = 31438
+    ip_protocol = "tcp"
+    cidr_ipv4   = "10.39.134.0/24"
+    description = "Allow Appstream subnet 31438 1"
+  },
+  "appstream_31438_2" = {
+    from_port   = 31438
+    to_port     = 31438
+    ip_protocol = "tcp"
+    cidr_ipv4   = "10.39.135.0/24"
+    description = "Allow Appstream subnet 31438 2"
+  },
+  "appstream_31438_3" = {
+    from_port   = 31438
+    to_port     = 31438
+    ip_protocol = "tcp"
+    cidr_ipv4   = "10.39.133.0/24"
+    description = "Allow Appstream subnet 31438 3"
   },
   "tcp_554_1" = {
     from_port   = 554
@@ -585,6 +627,34 @@ foodpro_instance_ingress_rules = {
     ip_protocol = -1
     cidr_ipv4   = "10.11.134.0/24"
     description = "Allow All Traffic from SOC DB Admin VPN"
+  },
+  "central_rpa_level4_subnet1a_1" = {
+    from_port   = 8992
+    to_port     = 8992
+    ip_protocol = "tcp"
+    cidr_ipv4   = "10.37.62.128/26"
+    description = "Allow Central RPA Level4 App Subnet 1a 1"
+  },
+  "central_rpa_level4_subnet1a_2" = {
+    from_port   = 31438
+    to_port     = 31438
+    ip_protocol = "tcp"
+    cidr_ipv4   = "10.37.62.128/26"
+    description = "Allow Central RPA Level4 App Subnet 1a 2"
+  },
+  "central_rpa_level4_subnet1b_1" = {
+    from_port   = 8992
+    to_port     = 8992
+    ip_protocol = "tcp"
+    cidr_ipv4   = "10.37.62.192/26"
+    description = "Allow Central RPA Level4 App Subnet 1b 1"
+  },
+  "central_rpa_level4_subnet1b_2" = {
+    from_port   = 31438
+    to_port     = 31438
+    ip_protocol = "tcp"
+    cidr_ipv4   = "10.37.62.192/26"
+    description = "Allow Central RPA Level4 App Subnet 1b 2"
   },
 }
 
@@ -869,6 +939,34 @@ foodpro_instance_egress_rules = {
     cidr_ipv4   = "10.11.134.0/24"
     description = "Allow All Traffic to SOC DB Admin VPN"
   },
+  "central_rpa_level4_subnet1a_1" = {
+    from_port   = 8992
+    to_port     = 8992
+    ip_protocol = "tcp"
+    cidr_ipv4   = "10.37.62.128/26"
+    description = "Allow Central RPA Level4 App Subnet 1a 1"
+  },
+  "central_rpa_level4_subnet1a_2" = {
+    from_port   = 31438
+    to_port     = 31438
+    ip_protocol = "tcp"
+    cidr_ipv4   = "10.37.62.128/26"
+    description = "Allow Central RPA Level4 App Subnet 1a 2"
+  },
+  "central_rpa_level4_subnet1b_1" = {
+    from_port   = 8992
+    to_port     = 8992
+    ip_protocol = "tcp"
+    cidr_ipv4   = "10.37.62.192/26"
+    description = "Allow Central RPA Level4 App Subnet 1b 1"
+  },
+  "central_rpa_level4_subnet1b_2" = {
+    from_port   = 31438
+    to_port     = 31438
+    ip_protocol = "tcp"
+    cidr_ipv4   = "10.37.62.192/26"
+    description = "Allow Central RPA Level4 App Subnet 1b 2"
+  },
 }
 
 foodpro_instances = {
@@ -881,7 +979,7 @@ foodpro_instances = {
     platform      = "windows"
     backup_policy = "11PM_DAILY"
     patch_policy  = "Week1"
-    jail_sg       = true
+    jail_sg       = false
     create        = true
     domain_name   = "dsfooddb-instance.prod.campusservices.cloud.huit.harvard.edu"
     root_block_device = [
