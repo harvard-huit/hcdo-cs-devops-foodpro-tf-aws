@@ -318,7 +318,7 @@ module "foodpro_instance" {
   platform      = each.value.platform
   backup_policy = each.value.backup_policy
   instance_type = each.value.instance_type
-  subnet_id     = each.value.subnet_id != null ? each.value.subnet_id : module.metadata.vpc_config.subnets[var.product_context]["app"][each.key % module.metadata.az_count]
+  # subnet_id     = each.value.subnet_id != null ? each.value.subnet_id : module.metadata.vpc_config.subnets[var.product_context]["app"][each.key % module.metadata.az_count]
 
   jailed = each.value.jail_sg
 
@@ -329,8 +329,8 @@ module "foodpro_instance" {
 
   modify_existing_ebs_block_devices = each.value.modify_existing_ebs_block_devices != null ? { for k, v in each.value.modify_existing_ebs_block_devices : k => merge(v, local.encryption_properties) } : null
 
-  ami                     = each.value.ami_id
-  security_group_ids      = [module.foodpro_instance_ec2_sg.sg.id]
+  ami = each.value.ami_id
+  # security_group_ids      = [module.foodpro_instance_ec2_sg.sg.id]
   disable_api_stop        = true
   disable_api_termination = true
   key_name                = each.value.key_name
@@ -346,4 +346,23 @@ module "foodpro_instance" {
       map-migrated = "PE-EHJNICEHK0"
     }
   )
+}
+
+resource "aws_network_interface" "foodpro_db_static" {
+
+  for_each = { for k, v in var.foodpro_instances : k => v if v.create }
+
+  subnet_id       = each.value.subnet_id != null ? each.value.subnet_id : module.metadata.vpc_config.subnets[var.product_context]["app"][each.key % module.metadata.az_count]
+  security_groups = var.jail_sg ? [module.foodpro_instance_ec2_sg.sg.id] : [module.metadata.global_sg_all, module.foodpro_instance_ec2_sg.sg.id]
+
+  tags = merge(
+    local.default_tags,
+    {
+      Name         = "${each.value.name}-nic"
+      map-migrated = "PE-EHJNICEHK0"
+      hosted_by    = var.product_hosted_by
+      environment  = var.product_environment
+    }
+  )
+
 }
