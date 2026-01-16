@@ -18,7 +18,7 @@ shared_values_prefix = "SharedValues-campussvcs-prod"
 acm_certificate_arn       = "arn:aws:acm:us-east-1:269988613319:certificate/5720a43b-55cb-4966-a99b-ae746ad0762d"
 iam_instance_profile_name = "campussvcs-prod-foodpro-instance-role"
 jail_sg                   = false
-lift_and_shift            = true
+lift_and_shift            = false
 
 create_alb = true
 
@@ -133,6 +133,13 @@ alb_sg_ingress_rules = {
     cidr_ipv4   = "128.103.32.0/27"
     description = "Allow HTTP 80 6"
   },
+  "http_7" = {
+    from_port   = 80
+    to_port     = 80
+    ip_protocol = "tcp"
+    cidr_ipv4   = "10.1.73.0/24"
+    description = "Allow HTTP 80 HUDS VPN Tunnel"
+  },
   "https_1" = {
     from_port   = 443
     to_port     = 443
@@ -174,135 +181,149 @@ alb_sg_ingress_rules = {
     ip_protocol = "tcp"
     cidr_ipv4   = "128.103.32.0/27"
     description = "Allow HTTPS 443 6"
+  },
+  "https_7" = {
+    from_port   = 443
+    to_port     = 443
+    ip_protocol = "tcp"
+    cidr_ipv4   = "10.1.73.0/24"
+    description = "Allow HTTPS 443 HUDS VPN Tunnel"
   },
 }
 alb_sg_egress_rules = {
-  "cstl_vpn_http1" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "10.1.188.0/24"
-    description = "Allow HTTP from CSTL VPN NAT"
-  },
-  "cstl_vpn_https1" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "10.1.188.0/24"
-    description = "Allow HTTPS from CSTL VPN NAT"
-  },
-  "cloudadmin_vpn_http1" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "10.11.22.0/24"
-    description = "Allow HTTP from CloudAdmin VPN NAT"
-  },
-  "cloudadmin_vpn_https1" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "10.11.22.0/24"
-    description = "Allow HTTPS from CloudAdmin VPN NAT"
-  },
-  "socdbadmin_vpn_http1" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "10.11.134.0/24"
-    description = "Allow HTTP from SOC DB Admin VPN NAT"
-  },
-  "socdbadmin_vpn_https1" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "10.11.134.0/24"
-    description = "Allow HTTPS from SOC DB Admin VPN NAT"
-  },
-  "http_1" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.132.0/24"
-    description = "Allow HTTP 80 1"
-  },
-  "http_2" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.133.0/24"
-    description = "Allow HTTP 80 2"
-  },
-  "http_3" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.134.0/24"
-    description = "Allow HTTP 80 3"
-  },
-  "http_4" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.161.0/25"
-    description = "Allow HTTP 80 4"
-  },
-  "http_5" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.244.0/24"
-    description = "Allow HTTP 80 5"
-  },
-  "http_6" = {
-    from_port   = 80
-    to_port     = 80
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.32.0/27"
-    description = "Allow HTTP 80 6"
-  },
-  "https_1" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.132.0/24"
-    description = "Allow HTTPS 443 1"
-  },
-  "https_2" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.133.0/24"
-    description = "Allow HTTPS 443 2"
-  },
-  "https_3" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.134.0/24"
-    description = "Allow HTTPS 443 3"
-  },
-  "https_4" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.161.0/25"
-    description = "Allow HTTPS 443 4"
-  },
-  "https_5" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.244.0/24"
-    description = "Allow HTTPS 443 5"
-  },
-  "https_6" = {
-    from_port   = 443
-    to_port     = 443
-    ip_protocol = "tcp"
-    cidr_ipv4   = "128.103.32.0/27"
-    description = "Allow HTTPS 443 6"
-  },
+  "all" = {
+    from_port   = null
+    to_port     = null
+    ip_protocol = "-1"
+    cidr_ipv4   = "0.0.0.0/0"
+    description = "Allow All out"
+  }
+  # "cstl_vpn_http1" = {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "10.1.188.0/24"
+  #   description = "Allow HTTP from CSTL VPN NAT"
+  # },
+  # "cstl_vpn_https1" = {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "10.1.188.0/24"
+  #   description = "Allow HTTPS from CSTL VPN NAT"
+  # },
+  # "cloudadmin_vpn_http1" = {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "10.11.22.0/24"
+  #   description = "Allow HTTP from CloudAdmin VPN NAT"
+  # },
+  # "cloudadmin_vpn_https1" = {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "10.11.22.0/24"
+  #   description = "Allow HTTPS from CloudAdmin VPN NAT"
+  # },
+  # "socdbadmin_vpn_http1" = {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "10.11.134.0/24"
+  #   description = "Allow HTTP from SOC DB Admin VPN NAT"
+  # },
+  # "socdbadmin_vpn_https1" = {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "10.11.134.0/24"
+  #   description = "Allow HTTPS from SOC DB Admin VPN NAT"
+  # },
+  # "http_1" = {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.132.0/24"
+  #   description = "Allow HTTP 80 1"
+  # },
+  # "http_2" = {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.133.0/24"
+  #   description = "Allow HTTP 80 2"
+  # },
+  # "http_3" = {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.134.0/24"
+  #   description = "Allow HTTP 80 3"
+  # },
+  # "http_4" = {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.161.0/25"
+  #   description = "Allow HTTP 80 4"
+  # },
+  # "http_5" = {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.244.0/24"
+  #   description = "Allow HTTP 80 5"
+  # },
+  # "http_6" = {
+  #   from_port   = 80
+  #   to_port     = 80
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.32.0/27"
+  #   description = "Allow HTTP 80 6"
+  # },
+  # "https_1" = {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.132.0/24"
+  #   description = "Allow HTTPS 443 1"
+  # },
+  # "https_2" = {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.133.0/24"
+  #   description = "Allow HTTPS 443 2"
+  # },
+  # "https_3" = {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.134.0/24"
+  #   description = "Allow HTTPS 443 3"
+  # },
+  # "https_4" = {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.161.0/25"
+  #   description = "Allow HTTPS 443 4"
+  # },
+  # "https_5" = {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.244.0/24"
+  #   description = "Allow HTTPS 443 5"
+  # },
+  # "https_6" = {
+  #   from_port   = 443
+  #   to_port     = 443
+  #   ip_protocol = "tcp"
+  #   cidr_ipv4   = "128.103.32.0/27"
+  #   description = "Allow HTTPS 443 6"
+  # },
 }
 
 foodpro_instance_ingress_rules = {
@@ -972,7 +993,7 @@ foodpro_instance_egress_rules = {
 foodpro_instances = {
   0 = {
     name          = "dsfooddb"
-    ami_id        = "ami-073a9084af52cfb6c"
+    ami_id        = "ami-0cbe877c664adc9cb"
     instance_type = "m5.xlarge"
     key_name      = "foodpro-prod-standard"
     static        = true
