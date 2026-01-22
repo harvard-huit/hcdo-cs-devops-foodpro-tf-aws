@@ -53,6 +53,45 @@ locals {
   # )
   # You can then use the same merge function to add these tags to any resource you create alongside any resource-specific tags.
 
+  encryption_properties = {
+    encrypted  = true
+    kms_key_id = module.foodpro_ec2_key.key_arn
+  }
+
+  alb_ingress_to_web_rules = {
+    "elb_http" = {
+      from_port                    = 80
+      to_port                      = 80
+      ip_protocol                  = "tcp"
+      referenced_security_group_id = module.foodpro_private_alb_sg.sg.id
+      description                  = "Allow HTTP from ALB"
+    },
+    "elb_https" = {
+      from_port                    = 443
+      to_port                      = 443
+      ip_protocol                  = "tcp"
+      referenced_security_group_id = module.foodpro_private_alb_sg.sg.id
+      description                  = "Allow HTTPS from ALB"
+    },
+  }
+
+  alb_egress_from_web_rules = {
+    "elb_http" = {
+      from_port                    = 80
+      to_port                      = 80
+      ip_protocol                  = "tcp"
+      referenced_security_group_id = module.foodpro_private_alb_sg.sg.id
+      description                  = "Allow HTTP to ALB"
+    },
+    "elb_https" = {
+      from_port                    = 443
+      to_port                      = 443
+      ip_protocol                  = "tcp"
+      referenced_security_group_id = module.foodpro_private_alb_sg.sg.id
+      description                  = "Allow HTTPS to ALB"
+    },
+  }
+
 }
 
 # ------------------------------------------------------------------------------
@@ -91,7 +130,243 @@ module "metadata" {
 # Resources
 # ------------------------------------------------------------------------------
 
-# Place additional resources here. The following resource is just used as an example.
-resource "null_resource" "do_nothing" {
+module "foodpro_private_alb_sg" {
+  source  = "artifactory.huit.harvard.edu/cloudarch-terraform-virtual__aws-modules/aws_sg/aws"
+  version = "~> v2.0"
+
+
+  # Module Variables
+  tier   = "app"
+  vpc_id = module.metadata.vpc_config.vpc_id
+
+  name_prefix = "${module.constants.resource_prefix}-web-alb-priv"
+
+  ingress_rules = var.alb_sg_ingress_rules
+
+  egress_rules = var.alb_sg_egress_rules
+
+}
+
+module "foodpro_instance_ec2_sg" {
+  source  = "artifactory.huit.harvard.edu/cloudarch-terraform-virtual__aws-modules/aws_sg/aws"
+  version = "~> v2.0"
+
+
+  # Module Variables
+  tier   = "app"
+  vpc_id = module.metadata.vpc_config.vpc_id
+
+  name_prefix = "${module.constants.resource_prefix}-web-ec2"
+
+  ingress_rules = merge(var.foodpro_instance_ingress_rules, local.alb_ingress_to_web_rules)
+
+  egress_rules = merge(var.foodpro_instance_egress_rules, local.alb_egress_from_web_rules)
+
+  jailed     = var.jail_sg
+  depends_on = [module.foodpro_private_alb_sg]
+}
+
+# -----------------------------------------------------------------------------
+# Application Load Balancer
+# -----------------------------------------------------------------------------
+
+locals {
+  log_bucket_name = "campussvcs-${var.product_environment_short}-standard-elb-logs"
+}
+
+module "foodpro_private_alb_record" {
+  source  = "artifactory.huit.harvard.edu/cloudarch-terraform-virtual__aws-modules/aws_route53/aws"
+  version = "~> v0.1"
+
+  count = var.create_alb ? 1 : 0
+
+  zone_id     = var.zone_id
+  domain_name = var.foodpro_private_alb_domain_name
+  type        = "A"
+  alias = {
+    name                   = module.foodpro_private_alb[0].dns_name
+    evaluate_target_health = false
+  }
+}
+
+module "foodpro_private_alb" {
+  source  = "artifactory.huit.harvard.edu/cloudarch-terraform-virtual__aws-modules/aws_loadbalancer/aws"
+  version = "~> v0.0" # This is just to ensure the latest version will be pulled when the app is first set up.
+
+  count = var.create_alb ? 1 : 0
+
+  internal       = true
+  constants_data = module.constants
+  metadata_data  = module.metadata
+
+  security_group_ids = [module.foodpro_private_alb_sg.sg.id]
+  subnet_ids         = module.metadata.vpc_config.subnets[var.product_context]["elbpriv"]
+
+  enable_deletion_protection = true
+
+  access_logs = {
+    bucket = local.log_bucket_name
+    prefix = "${var.product_name_short}/${var.product_environment_short}/access-logs"
+  }
+
+  connection_logs = {
+    bucket  = local.log_bucket_name
+    enabled = true
+    prefix  = "${var.product_name_short}/${var.product_environment_short}/connection-logs"
+  }
+
+  client_keep_alive = 7200
+
+  listeners = {
+    http-https-redirect = {
+      port     = 80
+      protocol = "HTTP"
+      redirect = {
+        port        = "443"
+        protocol    = "HTTPS"
+        status_code = "HTTP_301"
+      }
+    }
+
+    https = {
+      port            = 443
+      protocol        = "HTTPS"
+      ssl_policy      = "ELBSecurityPolicy-TLS13-1-2-Res-2021-06"
+      certificate_arn = var.acm_certificate_arn
+
+      forward = {
+        target_group_key = "foodpro_web_priv_tg"
+      }
+    }
+  }
+
+  target_groups = {
+    foodpro_web_priv_tg = {
+      name                              = "${module.constants.resource_prefix}-alb-https-priv-tg"
+      protocol                          = "HTTPS"
+      port                              = 443
+      target_type                       = "instance"
+      deregistration_delay              = 10
+      load_balancing_cross_zone_enabled = false
+      create_attachment                 = true
+      target_id                         = module.foodpro_instance[0].id
+
+      health_check = {
+        enabled             = true
+        interval            = 30
+        path                = "/"
+        port                = "traffic-port"
+        healthy_threshold   = 3
+        unhealthy_threshold = 3
+        timeout             = 6
+        protocol            = "HTTPS"
+        matcher             = "200-399"
+      }
+
+
+    }
+  }
+  tags = merge(
+    local.default_tags,
+    {
+      Name         = "${module.constants.resource_prefix}-alb"
+      map-migrated = "PE-EHJNICEHK0"
+    },
+  )
+}
+
+# -----------------------------------------------------------------------------
+# Instances
+# -----------------------------------------------------------------------------
+
+module "foodpro_ec2_key" {
+  source  = "artifactory.huit.harvard.edu/cloudarch-terraform-virtual__aws-modules/aws_kms/aws"
+  version = "~> v0.2"
+
+  tags = merge(local.default_tags, {
+    hosted_by = var.product_hosted_by
+  })
+  description    = "KMS key for ${var.product_name_short}-${var.product_environment_short} resources."
+  constants_data = module.constants
+  kms_key_for    = "ec2"
+  tier           = "app"
+  iam_role_name  = var.iam_instance_profile_name
+  lift_and_shift = var.lift_and_shift
+}
+
+module "foodpro_instance_record" {
+  source  = "artifactory.huit.harvard.edu/cloudarch-terraform-virtual__aws-modules/aws_route53/aws"
+  version = "~> v0.1"
+
+  for_each = { for k, v in var.foodpro_instances : k => v if v.create }
+
+  zone_id     = var.zone_id
+  domain_name = each.value.domain_name
+  type        = "A"
+  ttl         = 300
+  records     = [module.foodpro_instance[each.key].private_ip]
+}
+
+module "foodpro_instance" {
+  source  = "artifactory.huit.harvard.edu/cloudarch-terraform-virtual__aws-modules/aws_ec2/aws"
+  version = "~> v2.0"
+
+  for_each = { for k, v in var.foodpro_instances : k => v if v.create }
+
+  name          = each.value.name
+  static        = each.value.static
+  platform      = each.value.platform
+  backup_policy = each.value.backup_policy
+  instance_type = each.value.instance_type
+  # subnet_id     = each.value.subnet_id != null ? each.value.subnet_id : module.metadata.vpc_config.subnets[var.product_context]["app"][each.key % module.metadata.az_count]
+
+  jailed = each.value.jail_sg
+
+  constants_data = module.constants
+  metadata_data  = module.metadata
+
+  root_block_device = each.value.root_block_device != null ? [for device in each.value.root_block_device : merge(device, local.encryption_properties)] : null
+
+  modify_existing_ebs_block_devices = each.value.modify_existing_ebs_block_devices != null ? { for k, v in each.value.modify_existing_ebs_block_devices : k => merge(v, local.encryption_properties) } : null
+
+  ami = each.value.ami_id
+  # security_group_ids      = [module.foodpro_instance_ec2_sg.sg.id]
+  disable_api_stop        = true
+  disable_api_termination = true
+  key_name                = each.value.key_name
+
+  iam_instance_profile_name = var.iam_instance_profile_name
+
+  primary_network_interface = [{
+    network_interface_id = aws_network_interface.foodpro_db_static[each.key].id
+  }]
+
+  tags = merge(
+    local.default_tags,
+    {
+      patch_policy = each.value.patch_policy
+      hosted_by    = var.product_hosted_by
+      environment  = var.product_environment
+      map-migrated = "PE-EHJNICEHK0"
+    }
+  )
+}
+
+resource "aws_network_interface" "foodpro_db_static" {
+
+  for_each = { for k, v in var.foodpro_instances : k => v if v.create }
+
+  subnet_id       = each.value.subnet_id != null ? each.value.subnet_id : module.metadata.vpc_config.subnets[var.product_context]["app"][each.key % module.metadata.az_count]
+  security_groups = var.jail_sg ? [module.foodpro_instance_ec2_sg.sg.id] : [module.metadata.global_sg_all, module.foodpro_instance_ec2_sg.sg.id]
+
+  tags = merge(
+    local.default_tags,
+    {
+      Name         = "${each.value.name}-nic"
+      map-migrated = "PE-EHJNICEHK0"
+      hosted_by    = var.product_hosted_by
+      environment  = var.product_environment
+    }
+  )
 
 }
